@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_stack" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+        font-family: 'Roboto', sans-serif;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 16px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+
+    /* Staggered entrance animations */
+    @keyframes entranceFadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-entrance {
+      animation: entranceFadeSlide 400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .delay-header { animation-delay: 50ms; }
+    .delay-brand { animation-delay: 110ms; }
+    .delay-driver-id { animation-delay: 170ms; }
+    .delay-pin { animation-delay: 230ms; }
+    .delay-helpers { animation-delay: 290ms; }
+    .delay-buttons { animation-delay: 350ms; }
+    .delay-footer { animation-delay: 410ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-entrance {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "background": "#FFFFFF",
+            "surface": "#FFFFFF",
+            "primary": "#410332",
+            "primary-focus": "#300225",
+            "magenta-accent": "#AF0088",
+            "charcoal": "#000000",
+            "charcoal-body": "#3A3A3D",
+            "charcoal-muted": "#68686D",
+            "border-subtle": "#E5E7EB",
+            "border-input": "#D1D5DB",
+            "surface-low": "#F8F8F9"
+          },
+          borderRadius: {
+            "android": "0.75rem", // 12px
+            "android-lg": "0.875rem", // 14px
+            "full": "9999px"
+          },
+          fontFamily: {
+            sans: ["Roboto", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+<style></style></head>
+<body class="text-charcoal flex flex-col min-h-screen antialiased selection:bg-magenta-accent selection:text-white" data-new-gr-c-s-loaded="14.1349.0" style="background: linear-gradient(rgb(251, 248, 250) 0%, rgb(245, 239, 245) 50%, rgb(237, 230, 238) 100%) fixed;">
+<!-- Top App Bar / Android Status & Navigation Header -->
+<header class="fixed top-0 inset-x-0 z-50 pt-safe animate-entrance delay-header" style="background-color: rgba(251, 248, 250, 0.92); backdrop-filter: blur(8px);">
+<!-- Android Status Bar -->
+<!-- App Bar with Navigation -->
+<div class="h-14 px-4 flex items-center justify-between border-b border-border-subtle/40">
+<div class="flex items-center gap-2">
+<button aria-label="Navigate back" class="w-10 h-10 -ml-1 rounded-full flex items-center justify-center text-charcoal active:bg-black/5 transition-colors" onclick="history.back()">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="text-[19px] font-medium text-charcoal tracking-tight">Driver login</h1>
+</div>
+<div class="flex items-center">
+<div class="w-8 h-8 rounded-full bg-[#180011] flex items-center justify-center shadow-xs">
+<span class="material-symbols-outlined text-white text-[18px]">person</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 flex flex-col relative w-full pt-[84px]">
+<div class="flex flex-col w-full px-5 py-6 flex-1 justify-between">
+<!-- Upper Section: Welcome & Clean Form -->
+<div class="flex flex-col">
+<!-- Title & Subtitle -->
+<div class="mb-6 animate-entrance delay-brand">
+<div class="mb-4 flex items-center"><img alt="PassaGo Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq7J7FJoDN4cDevSfOrQ4SsEGLkrMfKZK_rVMfuX8tr0NlDqGncNuyhKXdBLCQJ1JS6aM8qRknTdHXqhrA-5sCeMbMhhYlY1kkFIMhrbP5tmxDkIHVOpss38CIHntlbcMrbqLnc9hxqHy2R46aoxFlFkr709pBKbbhb0wJXh-APdBJPUNF5V2w3pzR9bnGIeCz_wbTHiWhgnBp41sZnJ2tIeEB9suwyRBEUbX19Y4JKHPD32Kz5OeX"/></div><h2 class="text-[26px] leading-[32px] font-bold text-charcoal tracking-tight mb-2">Sign in to PassaGo</h2>
+<p class="text-[15px] leading-[22px] text-charcoal-body">Enter your TODA-registered Driver ID and 6-digit security PIN to begin your shift.</p>
+</div>
+<!-- Form Stack -->
+<form class="flex flex-col gap-5" onsubmit="event.preventDefault();">
+<!-- Field: Driver ID -->
+<div class="flex flex-col gap-1.5 animate-entrance delay-driver-id">
+<label class="text-[14px] font-medium text-charcoal" for="driver-id">Driver ID</label>
+<div class="relative flex items-center">
+<input class="w-full h-13 px-4 text-[16px] text-charcoal bg-white rounded-android border border-border-input placeholder:text-charcoal-muted/60 focus:outline-none focus:border-magenta-accent focus:ring-2 focus:ring-magenta-accent/20 transition-all shadow-xs" id="driver-id" type="text" value="TD-04927"/>
+<div class="absolute right-3.5 flex items-center text-magenta-accent pointer-events-none">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<!-- Verified Indicator Note -->
+<div class="flex items-center gap-1.5 pt-0.5 text-[13px]">
+<span class="font-medium text-magenta-accent">Verified</span>
+<span class="text-charcoal-muted">•</span>
+<span class="text-charcoal-body">Ramon Dela Cruz (Body No. 127)</span>
+</div>
+</div>
+<!-- Field: 6-digit Security PIN -->
+<div class="flex flex-col gap-1.5 animate-entrance delay-pin">
+<div class="flex items-center justify-between">
+<label class="text-[14px] font-medium text-charcoal" for="security-pin">6-digit security PIN</label>
+</div>
+<div class="relative flex items-center">
+<input class="w-full h-13 pl-4 pr-16 text-[18px] tracking-[0.25em] text-charcoal bg-white rounded-android border border-border-input placeholder:text-charcoal-muted/60 focus:outline-none focus:border-magenta-accent focus:ring-2 focus:ring-magenta-accent/20 transition-all shadow-xs" id="security-pin" inputmode="numeric" maxlength="6" pattern="[0-9]*" placeholder="••••••" type="password" value="123456"/>
+<button aria-label="Toggle PIN visibility" class="absolute right-0 h-13 px-4 flex items-center justify-center text-[13px] font-medium text-charcoal-body hover:text-charcoal active:opacity-70 transition-colors select-none" id="toggle-pin-btn" type="button">
+                Show
+              </button>
+</div>
+</div>
+<!-- Helpers: Remember checkbox & Forgot PIN -->
+<div class="flex items-center justify-between pt-1 animate-entrance delay-helpers">
+<label class="flex items-center gap-2.5 cursor-pointer select-none">
+<input checked="" class="w-[18px] h-[18px] rounded text-magenta-accent border-border-input focus:ring-magenta-accent/30 focus:ring-offset-0 cursor-pointer accent-[#AF0088]" type="checkbox"/>
+<span class="text-[14px] text-charcoal-body font-normal">Remember this device</span>
+</label>
+<button class="text-[14px] font-medium text-magenta-accent hover:underline active:opacity-75 transition-opacity" type="button">
+              Forgot PIN?
+            </button>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-3 pt-3 animate-entrance delay-buttons">
+<button class="w-full h-13 rounded-android-lg bg-primary text-white text-[15px] font-medium tracking-wide flex items-center justify-center transition-all duration-150 active:scale-[0.99] active:bg-primary-focus shadow-xs" id="login-btn" type="button">
+              Log in
+            </button>
+<button class="w-full h-13 rounded-android-lg bg-white border border-border-input text-charcoal text-[15px] font-medium flex items-center justify-center transition-all duration-150 hover:bg-surface-low active:bg-black/5 active:scale-[0.99]" type="button">
+              Log in with mobile number (SMS OTP)
+            </button>
+</div>
+</form>
+</div>
+<!-- Footer Section: Simplified Helpline & Support -->
+<footer class="pt-10 pb-safe animate-entrance delay-footer">
+<div class="pt-5 border-t border-border-subtle flex flex-col items-center justify-center gap-1.5 text-center">
+<div class="flex items-center justify-center gap-1.5 text-charcoal-body">
+<span class="material-symbols-outlined text-[17px] text-charcoal-muted">call</span>
+<span class="text-[13px] font-medium">Terminal dispatch helpline:</span>
+<a class="text-[13px] font-semibold text-charcoal hover:text-magenta-accent transition-colors underline decoration-border-input underline-offset-2" href="tel:0289215500">
+              (02) 8921-5500
+            </a>
+</div>
+<p class="text-[12px] text-charcoal-muted">
+            PassaGo TODA Dispatch System • 24/7 Driver Support
+          </p>
+</div>
+</footer>
+</div>
+<script>
+      (function() {
+        const pinInput = document.getElementById('security-pin');
+        const toggleBtn = document.getElementById('toggle-pin-btn');
+
+        if (pinInput && toggleBtn) {
+          toggleBtn.addEventListener('click', function() {
+            if (pinInput.type === 'password') {
+              pinInput.type = 'text';
+              toggleBtn.textContent = 'Hide';
+            } else {
+              pinInput.type = 'password';
+              toggleBtn.textContent = 'Show';
+            }
+          });
+        }
+
+        const loginBtn = document.getElementById('login-btn');
+        if (loginBtn) {
+          loginBtn.addEventListener('click', function() {
+            const originalText = loginBtn.textContent;
+            loginBtn.textContent = 'Verifying credentials...';
+            loginBtn.classList.add('opacity-90', 'cursor-not-allowed');
+            setTimeout(() => {
+              loginBtn.textContent = originalText;
+              loginBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+            }, 1200);
+          });
+        }
+      })();
+    </script>
+</main>
+<grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration>
+<grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration>
+</body></html>

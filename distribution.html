@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_tab" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              plum: "#410332",
+              magenta: "#AF0088",
+              pink: "#EE008A",
+              pinkSoft: "#FDF2F8",
+              charcoal: "#1A1A1C",
+              muted: "#5B5B60",
+              lightBorder: "#E5E7EB",
+              borderAlt: "#D1D5DB",
+              surfaceLight: "#F8F9FA"
+            }
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      overscroll-behavior: none;
+      -webkit-tap-highlight-color: transparent;
+      min-height: max(884px, 100dvh);
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .pt-safe {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    /* Scroll reveal animations */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="text-brand-charcoal flex flex-col min-h-screen selection:bg-brand-pinkSoft" style="background: linear-gradient(rgb(251, 248, 250) 0%, rgb(245, 239, 245) 50%, rgb(237, 230, 238) 100%) fixed;">
+<!-- Top System Bar & Android App Bar -->
+<header class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-lightBorder pt-safe">
+<!-- Android Status Bar Indicator -->
+<!-- App Bar -->
+<div class="h-14 px-4 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<img alt="PassaGo" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDdoGt7CcORbfJk7ixbdjEvLU-gj1qy_zdiR9068I3nhZQlOjU1bqW2XJ9brdGBbfR69E0NLHwW3luYoVUgmh-8nJvnph-wMTNVOBHpF6If-9_blych-pKayBge_n57NOjSBwbZ0550sEhYwy-oQudsqVwtJjTgkNBELR-bxh6usV7INi5C76gEdzAvhsfYw6-GvJIUS9jPPTbhxljUOr_9tws0RXPkEpCaA3cSGiSzfAgq8qPjoFR"/>
+<h1 class="text-[19px] font-bold tracking-tight text-brand-charcoal">Passenger Distribution</h1>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Notifications" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors text-brand-charcoal">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+<button aria-label="Profile" class="w-9 h-9 rounded-full bg-brand-plum flex items-center justify-center text-white font-medium hover:opacity-95 transition-opacity">
+<span class="material-symbols-outlined text-[19px]">person</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col pt-20 pb-24">
+<!-- Live Context Subheader -->
+<div class="px-4 pt-3 pb-2 flex items-center gap-2 text-xs font-medium text-brand-muted">
+<span class="w-2 h-2 rounded-full bg-brand-pink"></span>
+<span>Poblacion Market Terminal • AM live queue</span>
+</div>
+<!-- Active Trip Offer Card -->
+<div class="px-4 py-2">
+<section class="bg-white rounded-[14px] p-4 border-2 border-brand-magenta shadow-sm transition-all duration-300 reveal-on-scroll" id="assignmentAlert" style="opacity: 0.5;">
+<!-- Card Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5 text-brand-magenta font-semibold text-xs tracking-wide uppercase">
+<span class="material-symbols-outlined text-[18px]">alt_route</span>
+<span>New assignment</span>
+</div>
+<div class="flex items-center gap-1 text-brand-muted text-xs font-medium bg-gray-50 px-2.5 py-1 rounded-full border border-brand-lightBorder bg-red-50 text-red-600 border-red-200">
+<span class="material-symbols-outlined text-[15px] text-brand-pink">timer</span>
+<span id="countdown">Expired</span>
+</div>
+</div>
+<!-- Destination -->
+<div class="mt-2 mb-3">
+<h2 class="text-2xl font-bold tracking-tight text-brand-charcoal">Brgy. San Isidro</h2>
+</div>
+<!-- Key Details Grid -->
+<div class="grid grid-cols-4 gap-2 py-3 px-3.5 bg-[#FAF9FB] rounded-[10px] border border-brand-lightBorder text-center">
+<div class="flex flex-col items-center">
+<span class="text-[11px] text-brand-muted uppercase tracking-wider">Pass.</span>
+<span class="text-[13px] font-bold text-brand-charcoal mt-0.5">3</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[11px] text-brand-muted uppercase tracking-wider">Bay</span>
+<span class="text-[13px] font-bold text-brand-charcoal mt-0.5">Bay 2</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[11px] text-brand-muted uppercase tracking-wider">Distance</span>
+<span class="text-[13px] font-bold text-brand-charcoal mt-0.5">2.8 km</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[11px] text-brand-muted uppercase tracking-wider">Est. Fare</span>
+<span class="text-[14px] font-bold text-brand-plum mt-0.5">₱45.00</span>
+</div>
+</div>
+<p class="text-xs text-brand-muted mt-2.5 leading-relaxed">
+          If declined or expired, this trip passes automatically to Edwin Reyes (#04).
+        </p>
+<!-- CTAs -->
+<div class="grid grid-cols-2 gap-2.5 mt-3.5">
+<button class="h-11 w-full rounded-[10px] border border-brand-borderAlt font-medium text-sm text-brand-charcoal hover:bg-gray-50 active:bg-gray-100 transition-all flex items-center justify-center btn-action-interactive" id="declineBtn" type="button">
+            Decline
+          </button>
+<button class="h-11 w-full rounded-[10px] bg-brand-plum text-white font-medium text-sm hover:opacity-95 active:scale-[0.99] transition-all flex items-center justify-center gap-1.5 shadow-sm btn-action-interactive" id="acceptBtn" type="button">
+<span class="material-symbols-outlined text-[19px]">check_circle</span>
+<span>Accept trip</span>
+</button>
+</div>
+</section>
+</div>
+<!-- Divider -->
+<div class="h-[1px] bg-brand-lightBorder my-3 mx-4"></div>
+<!-- Dispatch Queue Section -->
+<section class="px-4 reveal-on-scroll" style="transition-delay: 50ms;">
+<div class="flex items-center justify-between">
+<h3 class="text-base font-bold text-brand-charcoal">TODA dispatch queue</h3>
+<span class="text-xs font-medium text-brand-magenta">Fair-share priority</span>
+</div>
+<!-- Segmented Control Filters -->
+<div class="flex p-1 bg-gray-100 rounded-[10px] mt-2.5 text-xs font-medium" role="tablist">
+<button class="flex-1 py-1.5 rounded-[8px] bg-white text-brand-charcoal font-semibold shadow-xs text-center transition-all" id="tabAvailable" onclick="switchTab('available')">
+          Available (16)
+        </button>
+<button class="flex-1 py-1.5 rounded-[8px] text-brand-muted font-medium text-center hover:text-brand-charcoal transition-all" id="tabOnTrip" onclick="switchTab('ontrip')">
+          On trip (9)
+        </button>
+<button class="flex-1 py-1.5 rounded-[8px] text-brand-muted font-medium text-center hover:text-brand-charcoal transition-all" id="tabAll" onclick="switchTab('all')">
+          All (25)
+        </button>
+</div>
+<!-- Queue List -->
+<div class="mt-3 p-3 bg-white rounded-[10px] border border-brand-lightBorder shadow-xs reveal-on-scroll" style="transition-delay: 80ms;"><div class="flex items-center justify-between mb-2"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-brand-magenta animate-pulse"></span><span class="text-xs font-semibold text-brand-charcoal">Syncing Terminal Arrivals</span></div><span class="text-[11px] text-brand-muted font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[13px] animate-spin">sync</span> Live update</span></div><div class="space-y-2"><div class="flex items-center justify-between gap-3"><div class="flex items-center gap-2 flex-1"><div class="w-7 h-7 rounded-full shimmer-skeleton"></div><div class="flex-1 space-y-1.5"><div class="h-3 w-28 rounded shimmer-skeleton"></div><div class="h-2.5 w-16 rounded shimmer-skeleton"></div></div></div><div class="h-6 w-16 rounded-full shimmer-skeleton"></div></div><div class="flex items-center justify-between gap-3 pt-1"><div class="flex items-center gap-2 flex-1"><div class="w-7 h-7 rounded-full shimmer-skeleton"></div><div class="flex-1 space-y-1.5"><div class="h-3 w-36 rounded shimmer-skeleton"></div><div class="h-2.5 w-20 rounded shimmer-skeleton"></div></div></div><div class="h-4 w-12 rounded shimmer-skeleton"></div></div></div></div><div class="mt-3 divide-y divide-brand-lightBorder border-y border-brand-lightBorder" id="queueList">
+<!-- Driver 01 -->
+<div class="py-2.5 flex items-center justify-between reveal-on-scroll" style="transition-delay: 100ms;">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-brand-charcoal">#01 • Jun Bautista</span>
+<span class="text-xs text-brand-muted">Body 089</span>
+</div>
+<span class="text-xs text-brand-muted">5 pax served today</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-pink-50 text-brand-magenta text-[11px] font-semibold border border-pink-100">
+<span class="w-1.5 h-1.5 rounded-full bg-brand-pink"></span>
+            Offered
+          </span>
+</div>
+<!-- Driver 02 -->
+<div class="py-2.5 flex items-center justify-between reveal-on-scroll" style="transition-delay: 150ms;">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-brand-charcoal">#02 • Arnel Santos</span>
+<span class="text-xs text-brand-muted">Body 214</span>
+</div>
+<span class="text-xs text-brand-muted">7 pax served today</span>
+</div>
+<span class="text-xs font-medium text-brand-muted">Wait ~18m</span>
+</div>
+<!-- Driver 03 (YOU) -->
+<div class="py-2.5 px-3 -mx-3 bg-brand-pinkSoft/60 rounded-[10px] my-1 border-l-4 border-brand-magenta flex items-center justify-between reveal-on-scroll" style="transition-delay: 200ms;">
+<div>
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-sm font-bold text-brand-charcoal">#03 • Ramon Dela Cruz (YOU)</span>
+<span class="text-xs text-brand-muted">Body 102</span>
+</div>
+<div class="flex items-center gap-2 mt-0.5">
+<span class="text-xs text-brand-muted">9 pax served today</span>
+<span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-brand-magenta text-white">Next in line</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-brand-magenta block">Wait ~12m</span>
+<span class="text-[11px] text-brand-muted">Standby Bay 2</span>
+</div>
+</div>
+<!-- Driver 04 -->
+<div class="py-2.5 flex items-center justify-between reveal-on-scroll" style="transition-delay: 250ms;">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-brand-charcoal">#04 • Edwin Reyes</span>
+<span class="text-xs text-brand-muted">Body 056</span>
+</div>
+<span class="text-xs text-brand-muted">11 pax served today</span>
+</div>
+<span class="text-xs font-medium text-brand-muted">Wait ~9m</span>
+</div>
+<!-- Driver 05 -->
+<div class="py-2.5 flex items-center justify-between reveal-on-scroll" style="transition-delay: 300ms;">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-brand-charcoal">#05 • Mario Lopez</span>
+<span class="text-xs text-brand-muted">Body 033</span>
+</div>
+<span class="text-xs text-brand-muted">12 pax served today</span>
+</div>
+<span class="text-xs font-medium text-brand-muted">Wait ~6m</span>
+</div>
+<div class="py-2.5 flex items-center justify-between opacity-75 reveal-on-scroll" style="transition-delay: 350ms;"><div class="space-y-1.5"><div class="flex items-center gap-2"><div class="h-4 w-28 rounded shimmer-skeleton"></div><div class="h-3 w-14 rounded shimmer-skeleton"></div></div><div class="h-3 w-20 rounded shimmer-skeleton"></div></div><div class="h-6 w-16 rounded-full shimmer-skeleton"></div></div><div class="py-2.5 flex items-center justify-between opacity-60 reveal-on-scroll" style="transition-delay: 400ms;"><div class="space-y-1.5"><div class="flex items-center gap-2"><div class="h-4 w-32 rounded shimmer-skeleton"></div><div class="h-3 w-12 rounded shimmer-skeleton"></div></div><div class="h-3 w-24 rounded shimmer-skeleton"></div></div><div class="h-5 w-14 rounded shimmer-skeleton"></div></div></div>
+</section>
+<!-- Terminal Demand Section -->
+<section class="px-4 mt-5 reveal-on-scroll" style="transition-delay: 100ms;">
+<div class="flex items-center justify-between mb-2">
+<h3 class="text-base font-bold text-brand-charcoal">Terminal demand</h3>
+<span class="text-xs font-medium text-brand-muted">Live turnstile</span>
+</div>
+<div class="divide-y divide-brand-lightBorder border-t border-brand-lightBorder">
+<!-- Demand Item 1 -->
+<div class="py-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-brand-magenta">location_on</span>
+<div>
+<p class="text-sm font-semibold text-brand-charcoal">Brgy. San Isidro</p>
+<p class="text-xs text-brand-muted">Bay 1 &amp; 2 • ~5 min wait</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-sm font-bold text-brand-charcoal">8 waiting</span>
+<span class="block text-[11px] font-semibold text-brand-pink">High demand</span>
+</div>
+</div>
+<!-- Demand Item 2 -->
+<div class="py-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-brand-muted">location_on</span>
+<div>
+<p class="text-sm font-semibold text-brand-charcoal">Poblacion East</p>
+<p class="text-xs text-brand-muted">Bay 3 • ~8 min wait</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-sm font-bold text-brand-charcoal">6 waiting</span>
+<span class="block text-[11px] font-medium text-brand-muted">Moderate</span>
+</div>
+</div>
+<!-- Demand Item 3 -->
+<div class="py-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-brand-muted">location_on</span>
+<div>
+<p class="text-sm font-semibold text-brand-charcoal">Brgy. Malinis</p>
+<p class="text-xs text-brand-muted">Bay 4 • ~6 min wait</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-sm font-bold text-brand-charcoal">5 waiting</span>
+<span class="block text-[11px] font-medium text-brand-muted">Normal</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Modern Android Bottom Navigation Bar -->
+<nav class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-brand-lightBorder pb-safe">
+<div class="grid grid-cols-4 h-16 w-full max-w-md mx-auto"><a class="nav-tab-item flex flex-col items-center justify-center text-brand-muted hover:text-brand-charcoal transition-colors" data-path="driver-dashboard" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="text-[11px] font-medium mt-0.5">Dashboard</span></a><a aria-current="page" class="nav-tab-item flex flex-col items-center justify-center text-brand-magenta transition-colors relative" data-path="passenger-distribution" href="#"><span class="material-symbols-outlined text-[22px] font-semibold">hub</span><span class="text-[11px] font-bold mt-0.5">Distribution</span></a><a class="nav-tab-item flex flex-col items-center justify-center text-brand-muted hover:text-brand-charcoal transition-colors" data-path="trip-records" href="#"><span class="material-symbols-outlined text-[22px]">receipt_long</span><span class="text-[11px] font-medium mt-0.5">Trips</span></a><a class="nav-tab-item flex flex-col items-center justify-center text-brand-muted hover:text-brand-charcoal transition-colors" data-path="driver-profile" href="#"><span class="material-symbols-outlined text-[22px]">account_circle</span><span class="text-[11px] font-medium mt-0.5">Profile</span></a></div>
+</nav>
+<!-- Micro-interactions & Scroll Animation Script -->
+<script>
+    (function () {
+      var seconds = 30;
+      var timerEl = document.getElementById('countdown');
+      var card = document.getElementById('assignmentAlert');
+      var acceptBtn = document.getElementById('acceptBtn');
+      var declineBtn = document.getElementById('declineBtn');
+
+      // Countdown logic
+      if (timerEl) {
+        var interval = setInterval(function () {
+          seconds--;
+          if (seconds <= 0) {
+            clearInterval(interval);
+            timerEl.textContent = 'Expired';
+            timerEl.parentElement.classList.add('bg-red-50', 'text-red-600', 'border-red-200');
+            if (card) card.style.opacity = '0.5';
+          } else {
+            var formatted = seconds < 10 ? '0' + seconds : seconds;
+            timerEl.textContent = '0:' + formatted + ' remaining';
+          }
+        }, 1000);
+      }
+
+      // Action Handlers
+      if (acceptBtn) {
+        acceptBtn.addEventListener('click', function () {
+          acceptBtn.innerHTML = '<span class="material-symbols-outlined text-[19px]">check</span> Accepted';
+          acceptBtn.classList.remove('bg-brand-plum');
+          acceptBtn.classList.add('bg-emerald-700');
+          if (declineBtn) {
+            declineBtn.style.display = 'none';
+          }
+          if (card) {
+            card.classList.replace('border-brand-magenta', 'border-emerald-600');
+          }
+        });
+      }
+
+      if (declineBtn) {
+        declineBtn.addEventListener('click', function () {
+          if (card) {
+            card.style.transition = 'all 0.3s ease';
+            card.style.transform = 'scale(0.96)';
+            card.style.opacity = '0';
+            setTimeout(function () {
+              card.style.display = 'none';
+            }, 300);
+          }
+        });
+      }
+
+      // IntersectionObserver for Reveal Animations
+      if ('IntersectionObserver' in window) {
+        var revealElements = document.querySelectorAll('.reveal-on-scroll');
+        var revealObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -20px 0px'
+        });
+
+        revealElements.forEach(function (el) {
+          revealObserver.observe(el);
+        });
+      } else {
+        // Fallback for browsers without IntersectionObserver
+        var elements = document.querySelectorAll('.reveal-on-scroll');
+        elements.forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+      }
+    })();
+
+    // Queue Segment Switcher
+    function switchTab(type) {
+      var btnAvail = document.getElementById('tabAvailable');
+      var btnTrip = document.getElementById('tabOnTrip');
+      var btnAll = document.getElementById('tabAll');
+      var buttons = [btnAvail, btnTrip, btnAll];
+
+      buttons.forEach(function (btn) {
+        if (!btn) return;
+        btn.className = 'flex-1 py-1.5 rounded-[8px] text-brand-muted font-medium text-center hover:text-brand-charcoal transition-all';
+      });
+
+      var active;
+      if (type === 'available') active = btnAvail;
+      if (type === 'ontrip') active = btnTrip;
+      if (type === 'all') active = btnAll;
+
+      if (active) {
+        active.className = 'flex-1 py-1.5 rounded-[8px] bg-white text-brand-charcoal font-semibold shadow-xs text-center transition-all';
+      }
+    }
+  </script>
+</body></html>

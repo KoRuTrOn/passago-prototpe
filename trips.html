@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_tab" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            plum: "#410332",
+            "plum-dark": "#300224",
+            magenta: "#AF0088",
+            "magenta-light": "#FDF2FA",
+            "bright-pink": "#EE008A",
+            charcoal: "#000000",
+            "charcoal-muted": "#3A3A3D",
+            "subtle-gray": "#71717A",
+            divider: "#EEEEF0",
+            "surface-subtle": "#F8F8FA"
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: #FFFFFF;
+      }
+      body {
+        overscroll-behavior: none;
+        font-family: 'Roboto', sans-serif;
+        color: #000000;
+        min-height: max(884px, 100dvh);
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 16px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    /* Ripple-like active feedback for Android feel */
+    .android-touch-press:active {
+      background-color: rgba(65, 3, 50, 0.05);
+    }
+    /* Meter animation */
+    @keyframes fillProgress {
+      from { width: 0%; }
+      to { width: 61%; }
+    }
+    .animate-progress {
+      animation: fillProgress 1.1s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+    }
+
+    /* Scroll Reveal Animations */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Accessibility: Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .animate-progress {
+        animation: none !important;
+        width: 61% !important;
+      }
+    }
+  </style>
+<style>
+@keyframes shimmerSweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(220, 215, 225, 0.4) 0%, rgba(255, 255, 255, 0.85) 50%, rgba(220, 215, 225, 0.4) 100%);
+  background-size: 200% 100%;
+  animation: shimmerSweep 1.6s infinite ease-in-out;
+}
+</style></head>
+<body class="text-charcoal flex flex-col min-h-screen antialiased" style="background: linear-gradient(rgb(251, 248, 250) 0%, rgb(245, 239, 245) 50%, rgb(237, 230, 238) 100%) fixed;">
+<!-- Android Status Bar & Top App Bar -->
+<header class="fixed top-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-b border-divider pt-safe">
+<!-- Android System Bar -->
+<!-- PassaGo Header -->
+<div class="h-14 px-4 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<img alt="PassaGo" class="h-7 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkxgA5Qtjiepw1szWobPOpuqcGlw-3SAnZmFyGJZL6J_GNDvKX-w1fZXIOZGAgIBPWlGil_Jx0zxKMHUkbE8Os66VzhJJ0sdTAD_Y2k0J5X95VZ-GftAkfxzB20RvoU7I74qvCtePxEcSel5_DUEH4v_XaCqsD1qt92Tz4Jxr-jqqM1clDtmdaXYIr52zQpirx7u3kVVbFmLr-q46LMh1pSyOvZqySEKxbnyJH98bXoAynnrIbugSP"/>
+<h1 class="text-[19px] font-medium text-charcoal tracking-normal">Trip Records</h1>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Notifications" class="w-10 h-10 rounded-full flex items-center justify-center text-charcoal-muted active:bg-surface-subtle transition-colors">
+<span class="material-symbols-outlined text-[21px]">notifications</span>
+</button>
+<button aria-label="Account Profile" class="w-9 h-9 ml-1 rounded-full bg-plum flex items-center justify-center text-white active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">person</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 flex flex-col relative w-full pt-[82px] pb-[76px]">
+<div class="flex flex-col w-full">
+<!-- Screen Header with Export Action -->
+<div class="px-4 pt-3 pb-2 flex items-center justify-between reveal-on-scroll">
+<div>
+<h2 class="text-[24px] font-bold text-plum tracking-tight">Trip records</h2>
+<p class="text-[13px] text-subtle-gray mt-0.5">Verified daily operator ledger &amp; queue audit</p>
+</div>
+<button class="h-9 px-3.5 rounded-lg border border-divider bg-white text-charcoal-muted flex items-center gap-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.03)] active:bg-surface-subtle active:border-subtle-gray/40 transition-all" id="exportBtn" type="button">
+<span class="material-symbols-outlined text-[17px] text-plum">download</span>
+<span class="text-[13px] font-medium tracking-tight">Export log</span>
+</button>
+</div>
+<!-- Time Filter Tabs (Today, This week, This month) -->
+<div class="px-4 py-2 flex items-center gap-2 overflow-x-auto scrollbar-none reveal-on-scroll" id="timeFilters" style="transition-delay: 40ms;"><button class="time-pill h-[34px] px-4 rounded-full bg-plum text-white text-[13px] font-medium tracking-tight flex items-center justify-center whitespace-nowrap shadow-sm transition-all duration-200 ease-out active:scale-95" data-filter="today" type="button">
+          Today
+        </button>
+<button class="time-pill h-[34px] px-4 rounded-full bg-surface-subtle border border-divider text-charcoal-muted text-[13px] font-medium tracking-tight flex items-center justify-center whitespace-nowrap active:bg-divider transition-all duration-200 ease-out active:scale-95" data-filter="week" type="button">
+          This week
+        </button>
+<button class="time-pill h-[34px] px-4 rounded-full bg-surface-subtle border border-divider text-charcoal-muted text-[13px] font-medium tracking-tight flex items-center justify-center whitespace-nowrap active:bg-divider transition-all duration-200 ease-out active:scale-95" data-filter="month" type="button">
+          This month
+        </button></div>
+<!-- Shift Filter Chips (All shifts, AM shift, PM shift) -->
+<div class="px-4 py-2 flex items-center gap-2 border-b border-divider pb-3.5 reveal-on-scroll" id="shiftFilters" style="transition-delay: 80ms;">
+<button class="shift-chip h-7 px-3 rounded-full bg-white border border-divider text-charcoal-muted text-[12px] font-medium flex items-center whitespace-nowrap active:bg-surface-subtle transition-all" data-shift="all" type="button">
+          All shifts
+        </button>
+<button class="shift-chip h-7 px-3 rounded-full bg-magenta-light border border-magenta text-magenta text-[12px] font-medium flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs" data-shift="am" type="button">
+<span class="w-1.5 h-1.5 rounded-full bg-bright-pink"></span>
+          AM shift
+        </button>
+<button class="shift-chip h-7 px-3 rounded-full bg-white border border-divider text-charcoal-muted text-[12px] font-medium flex items-center whitespace-nowrap active:bg-surface-subtle transition-all" data-shift="pm" type="button">
+          PM shift
+        </button>
+</div>
+<!-- Clean Summary Metrics Row -->
+<div class="px-4 mt-3.5 reveal-on-scroll" style="transition-delay: 100ms;">
+<div class="w-full rounded-xl border border-divider bg-white grid grid-cols-3 divide-x divide-divider shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+<!-- Gross fares -->
+<div class="p-3 flex flex-col justify-between">
+<span class="text-[12px] text-subtle-gray truncate">Gross fares</span>
+<div class="mt-1">
+<p class="text-[19px] font-bold text-charcoal tracking-tight">₱2,940</p>
+<p class="text-[11px] font-medium text-bright-pink mt-0.5 tracking-tight flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px] leading-none">trending_up</span>
+                +12.4% vs lw
+              </p>
+</div>
+</div>
+<!-- Passengers -->
+<div class="p-3 flex flex-col justify-between">
+<span class="text-[12px] text-subtle-gray truncate">Passengers</span>
+<div class="mt-1">
+<p class="text-[19px] font-bold text-charcoal tracking-tight">64 pax</p>
+<p class="text-[11px] text-charcoal-muted mt-0.5 tracking-tight">Avg 1.7 / trip</p>
+</div>
+</div>
+<!-- Completed Trips -->
+<div class="p-3 flex flex-col justify-between">
+<span class="text-[12px] text-subtle-gray truncate">Completed</span>
+<div class="mt-1">
+<p class="text-[19px] font-bold text-charcoal tracking-tight">38 trips</p>
+<p class="text-[11px] text-subtle-gray mt-0.5 tracking-tight">0 incidents</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Fair Turn Balance Gauge -->
+<div class="px-4 mt-3 reveal-on-scroll" style="transition-delay: 140ms;">
+<div class="p-3.5 rounded-xl border border-divider bg-surface-subtle flex flex-col gap-2">
+<div class="flex items-center justify-between text-[13px]">
+<div class="flex items-center gap-1.5 font-medium text-charcoal">
+<span class="material-symbols-outlined text-[17px] text-magenta">balance</span>
+<span>Your turn share: <strong class="text-plum font-semibold">6.1%</strong></span>
+</div>
+<span class="text-[11px] text-subtle-gray font-medium">Target: 6.3% (Balanced)</span>
+</div>
+<!-- Progress Meter -->
+<div class="w-full relative py-1">
+<div class="w-full h-2 rounded-full bg-divider relative overflow-hidden">
+<div class="h-full bg-gradient-to-r from-magenta to-bright-pink rounded-full animate-progress" style="width: 61%;"></div>
+</div>
+<!-- Target Marker Indicator Line -->
+<div class="absolute top-0 bottom-0 flex flex-col items-center pointer-events-none" style="left: 63%;">
+<div class="w-0.5 h-full bg-charcoal rounded-full shadow-xs"></div>
+</div>
+</div>
+<div class="flex items-center justify-between text-charcoal-muted pt-0.5">
+<p class="text-[11.5px] leading-tight text-subtle-gray">Earnings are evenly balanced across 16 active drivers.</p>
+<div class="flex items-center gap-1 text-bright-pink shrink-0 ml-2">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+<span class="text-[11px] font-medium text-magenta">Balanced</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Subtle Divider -->
+<div class="w-full border-t border-divider my-3.5"></div>
+<!-- Modern Trip Record Ledger -->
+<div class="flex flex-col">
+<!-- Date Group Header -->
+<div class="px-4 py-2 bg-surface-subtle border-y border-divider flex items-center justify-between reveal-on-scroll">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-bright-pink"></span>
+<span class="text-[13px] font-medium text-charcoal">Today, Tuesday 14 May</span>
+</div>
+<span class="text-[11px] font-medium text-subtle-gray tracking-tight">AM shift • 4 logged • ₱125.00</span>
+</div>
+<!-- Ledger Rows (Subtle 1px Dividers, No Floating Cards) -->
+<div class="divide-y divide-divider">
+<!-- Row 1: 09:42 AM -->
+<div class="px-4 py-3.5 flex items-center justify-between android-touch-press transition-colors cursor-pointer reveal-on-scroll" style="transition-delay: 40ms;">
+<div class="flex flex-col min-w-0 pr-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-[12px] font-semibold text-charcoal-muted">09:42 AM</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="text-[14px] font-medium text-charcoal truncate">Terminal → Brgy. San Isidro</span>
+</div>
+<div class="flex items-center gap-2 text-[12px] text-subtle-gray mt-1">
+<span>3 pax</span>
+<span class="text-divider text-[10px]">•</span>
+<span>2.8 km</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="font-medium text-magenta">Turn #14</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="text-[16px] font-bold text-charcoal tracking-tight">₱45.00</span>
+<span class="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-[#E7F6EC] text-[#0C7338]">PAID</span>
+</div>
+</div>
+<!-- Row 2: 08:51 AM -->
+<div class="px-4 py-3.5 flex items-center justify-between android-touch-press transition-colors cursor-pointer reveal-on-scroll" style="transition-delay: 80ms;">
+<div class="flex flex-col min-w-0 pr-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-[12px] font-semibold text-charcoal-muted">08:51 AM</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="text-[14px] font-medium text-charcoal truncate">Terminal → Poblacion East</span>
+</div>
+<div class="flex items-center gap-2 text-[12px] text-subtle-gray mt-1">
+<span>2 pax</span>
+<span class="text-divider text-[10px]">•</span>
+<span>1.6 km</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="font-medium text-subtle-gray">Turn #10</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="text-[16px] font-bold text-charcoal tracking-tight">₱30.00</span>
+<span class="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-[#E7F6EC] text-[#0C7338]">PAID</span>
+</div>
+</div>
+<!-- Row 3: 08:05 AM (Voided) -->
+<div class="px-4 py-3.5 flex items-center justify-between bg-surface-subtle/50 android-touch-press transition-colors cursor-pointer reveal-on-scroll" style="transition-delay: 120ms;">
+<div class="flex flex-col min-w-0 pr-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-[12px] font-medium text-subtle-gray">08:05 AM</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="text-[14px] font-normal text-subtle-gray line-through truncate">Terminal → Bagong Silang</span>
+</div>
+<div class="flex items-center gap-1.5 text-[12px] text-[#BA1A1A] mt-1">
+<span class="material-symbols-outlined text-[14px] leading-none">cancel</span>
+<span>Cancelled by passenger</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="text-[16px] font-medium text-subtle-gray tracking-tight">₱0.00</span>
+<span class="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-[#FDE8E8] text-[#BA1A1A]">VOID</span>
+</div>
+</div>
+<!-- Row 4: 07:18 AM -->
+<div class="px-4 py-3.5 flex items-center justify-between android-touch-press transition-colors cursor-pointer reveal-on-scroll" style="transition-delay: 160ms;">
+<div class="flex flex-col min-w-0 pr-3">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="text-[12px] font-semibold text-charcoal-muted">07:18 AM</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="text-[14px] font-medium text-charcoal truncate">Terminal → Brgy. Malinis</span>
+</div>
+<div class="flex items-center gap-2 text-[12px] text-subtle-gray mt-1">
+<span>2 pax</span>
+<span class="text-divider text-[10px]">•</span>
+<span>3.4 km</span>
+<span class="text-divider text-[10px]">•</span>
+<span class="font-medium text-subtle-gray">Turn #03</span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="text-[16px] font-bold text-charcoal tracking-tight">₱50.00</span>
+<span class="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-[#E7F6EC] text-[#0C7338]">PAID</span>
+</div>
+</div>
+<div class="px-4 py-3 bg-surface-subtle/40 border-t border-divider flex items-center justify-between text-subtle-gray text-[11px] font-medium reveal-on-scroll"><div class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-subtle-gray/60 animate-pulse"></span><span>Loading previous shifts...</span></div><span class="text-[10px] uppercase tracking-wider text-subtle-gray/70">Syncing</span></div><div class="px-4 py-3.5 flex items-center justify-between opacity-90 reveal-on-scroll" style="transition-delay: 40ms;">
+<div class="flex flex-col min-w-0 pr-3 flex-1">
+<div class="flex items-center gap-1.5">
+<div class="h-3.5 w-14 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3.5 w-48 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center gap-2 mt-1.5">
+<div class="h-3 w-10 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3 w-12 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3 w-14 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 gap-1.5">
+<div class="h-4 w-14 rounded skeleton-shimmer"></div>
+<div class="h-4 w-11 rounded skeleton-shimmer"></div>
+</div>
+</div><div class="px-4 py-3.5 flex items-center justify-between opacity-50 reveal-on-scroll" style="transition-delay: 80ms;">
+<div class="flex flex-col min-w-0 pr-3 flex-1">
+<div class="flex items-center gap-1.5">
+<div class="h-3.5 w-14 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3.5 w-36 rounded skeleton-shimmer"></div>
+</div>
+<div class="flex items-center gap-2 mt-1.5">
+<div class="h-3 w-10 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3 w-12 rounded skeleton-shimmer"></div>
+<span class="text-divider text-[10px]">•</span>
+<div class="h-3 w-14 rounded skeleton-shimmer"></div>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0 gap-1.5">
+<div class="h-4 w-12 rounded skeleton-shimmer"></div>
+<div class="h-4 w-11 rounded skeleton-shimmer"></div>
+</div>
+</div></div>
+</div>
+</div>
+</main>
+<!-- Modern Android Bottom Navigation (4 Tabs with Trips in Magenta #AF0088) -->
+<nav class="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-divider pb-safe shadow-[0_-2px_6px_rgba(0,0,0,0.03)]">
+<div class="grid grid-cols-4 h-16 w-full items-center"><!-- Dashboard -->
+<a class="flex flex-col items-center justify-center gap-1 text-subtle-gray hover:text-charcoal transition-all duration-200 ease-out active:scale-95" data-path="driver-dashboard" href="#">
+<span class="material-symbols-outlined text-[23px] transition-transform duration-200">dashboard</span>
+<span class="text-[11px] font-medium">Dashboard</span>
+</a>
+<!-- Distribution -->
+<a class="flex flex-col items-center justify-center gap-1 text-subtle-gray hover:text-charcoal transition-all duration-200 ease-out active:scale-95" data-path="passenger-distribution" href="#">
+<span class="material-symbols-outlined text-[23px] transition-transform duration-200">hub</span>
+<span class="text-[11px] font-medium">Distribution</span>
+</a>
+<!-- Active: Trips in Magenta -->
+<a aria-current="page" class="flex flex-col items-center justify-center gap-1 text-magenta transition-all duration-200 ease-out active:scale-95" data-path="trip-records" href="#">
+<span class="material-symbols-outlined text-[23px] font-bold transition-transform duration-200 scale-105">receipt_long</span>
+<span class="text-[11px] font-semibold text-magenta">Trips</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center gap-1 text-subtle-gray hover:text-charcoal transition-all duration-200 ease-out active:scale-95" data-path="driver-profile" href="#">
+<span class="material-symbols-outlined text-[23px] transition-transform duration-200">account_circle</span>
+<span class="text-[11px] font-medium">Profile</span>
+</a></div>
+</nav>
+<!-- Clean Interaction Script & Reveal Observer -->
+<script>
+    (function() {
+      // IntersectionObserver for Scroll-Triggered Reveal Animations
+      if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -20px 0px'
+        });
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+          revealObserver.observe(el);
+        });
+      } else {
+        // Fallback for older browsers
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+          el.classList.add('is-visible');
+        });
+      }
+
+      // Time Filter Toggle
+      const timePills = document.querySelectorAll('.time-pill');
+      timePills.forEach(btn => {
+        btn.addEventListener('click', () => {
+          timePills.forEach(b => {
+            b.className = 'time-pill h-[34px] px-4 rounded-full bg-surface-subtle border border-divider text-charcoal-muted text-[13px] font-medium tracking-tight flex items-center justify-center whitespace-nowrap active:bg-divider transition-all';
+          });
+          btn.className = 'time-pill h-[34px] px-4 rounded-full bg-plum text-white text-[13px] font-medium tracking-tight flex items-center justify-center whitespace-nowrap shadow-sm transition-all';
+        });
+      });
+
+      // Shift Filter Toggle
+      const shiftChips = document.querySelectorAll('.shift-chip');
+      shiftChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          shiftChips.forEach(c => {
+            c.className = 'shift-chip h-7 px-3 rounded-full bg-white border border-divider text-charcoal-muted text-[12px] font-medium flex items-center whitespace-nowrap active:bg-surface-subtle transition-all';
+            const dot = c.querySelector('span.rounded-full');
+            if (dot) dot.remove();
+          });
+          chip.className = 'shift-chip h-7 px-3 rounded-full bg-magenta-light border border-magenta text-magenta text-[12px] font-medium flex items-center gap-1.5 whitespace-nowrap transition-all shadow-xs';
+          const pip = document.createElement('span');
+          pip.className = 'w-1.5 h-1.5 rounded-full bg-bright-pink';
+          chip.prepend(pip);
+        });
+      });
+
+      // Export Button Tactile Feedback
+      const exportBtn = document.getElementById('exportBtn');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          const original = exportBtn.innerHTML;
+          exportBtn.innerHTML = '<span class="material-symbols-outlined text-[17px] text-[#0C7338]">check</span><span class="text-[13px] font-medium text-[#0C7338]">Exported</span>';
+          exportBtn.classList.add('bg-[#E7F6EC]', 'border-[#0C7338]/30');
+          setTimeout(() => {
+            exportBtn.innerHTML = original;
+            exportBtn.classList.remove('bg-[#E7F6EC]', 'border-[#0C7338]/30');
+          }, 1600);
+        });
+      }
+    })();
+  </script>
+</body></html>

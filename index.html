@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_blank" name="shell-type"/>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+        font-family: 'Roboto', sans-serif;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      main > :first-child {
+        margin-top: 0 !important;
+      }
+      main > :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    @keyframes entranceSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-entrance {
+      opacity: 0;
+      animation: entranceSlideUp 460ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .delay-1 { animation-delay: 60ms; }
+    .delay-2 { animation-delay: 140ms; }
+    .delay-3 { animation-delay: 220ms; }
+    .delay-4 { animation-delay: 300ms; }
+    .delay-5 { animation-delay: 380ms; }
+    .delay-6 { animation-delay: 460ms; }
+    .delay-7 { animation-delay: 540ms; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-entrance {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "plum-primary": "#410332",
+            "accent-magenta": "#AF0088",
+            "accent-pink": "#EE008A",
+            "text-main": "#000000",
+            "text-secondary": "#3A3A3D",
+            "text-muted": "#727270",
+            "border-hairline": "#EBE8E5",
+            "border-subtle": "#BCB7B2",
+            "surface-subtle": "#F9F8F9"
+          },
+          fontFamily: {
+            sans: ['Roboto', 'sans-serif'],
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-text-main pt-safe pb-safe min-h-screen flex flex-col antialiased selection:bg-[#ffd8ec]" style="background: linear-gradient(rgb(251, 248, 250) 0%, rgb(245, 239, 245) 50%, rgb(237, 230, 238) 100%); min-height: 100vh;">
+<!-- Android Status Bar Area -->
+<main class="flex-1 flex flex-col relative w-full justify-between">
+<div class="flex flex-col w-full">
+<!-- Top App Bar -->
+<header class="w-full px-5 flex items-center justify-between py-3" style="background-color: rgba(251, 248, 250, 0.85); backdrop-filter: blur(8px);">
+<div class="flex items-center gap-2"><img alt="PassaGo Logo" class="h-8 w-auto object-contain shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq7J7FJoDN4cDevSfOrQ4SsEGLkrMfKZK_rVMfuX8tr0NlDqGncNuyhKXdBLCQJ1JS6aM8qRknTdHXqhrA-5sCeMbMhhYlY1kkFIMhrbP5tmxDkIHVOpss38CIHntlbcMrbqLnc9hxqHy2R46aoxFlFkr709pBKbbhb0wJXh-APdBJPUNF5V2w3pzR9bnGIeCz_wbTHiWhgnBp41sZnJ2tIeEB9suwyRBEUbX19Y4JKHPD32Kz5OeX"/>
+<span class="text-xl font-bold tracking-tight text-text-main"><br/></span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#FAF7F9] border border-[#F0E6EE] px-2.5 py-1 rounded-full animate-entrance delay-1">
+<span class="w-2 h-2 rounded-full bg-accent-pink inline-block animate-pulse"></span>
+<span class="text-xs font-medium text-text-secondary">Online</span>
+</div>
+</header>
+<div class="w-full h-[1px] bg-border-hairline"></div>
+<!-- Main Welcome Content -->
+<div class="flex flex-col w-full px-5 pt-7 pb-4">
+<!-- Hero Header -->
+<section class="flex flex-col text-left mb-7">
+<div class="flex justify-center items-center py-4 mb-3 animate-entrance delay-2"><div class="p-3 bg-[#FAF7F9] border border-[#F0E6EE] rounded-2xl shadow-sm flex items-center justify-center"><img alt="PassaGo Logo" class="h-12 w-auto max-w-[220px] object-contain drop-shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq7J7FJoDN4cDevSfOrQ4SsEGLkrMfKZK_rVMfuX8tr0NlDqGncNuyhKXdBLCQJ1JS6aM8qRknTdHXqhrA-5sCeMbMhhYlY1kkFIMhrbP5tmxDkIHVOpss38CIHntlbcMrbqLnc9hxqHy2R46aoxFlFkr709pBKbbhb0wJXh-APdBJPUNF5V2w3pzR9bnGIeCz_wbTHiWhgnBp41sZnJ2tIeEB9suwyRBEUbX19Y4JKHPD32Kz5OeX"/></div></div><h1 class="text-[27px] leading-[34px] font-bold text-text-main tracking-tight mb-2.5 animate-entrance delay-3">
+            Fair passenger turns for every driver.
+          </h1>
+<p class="text-[15px] leading-relaxed text-text-secondary font-normal animate-entrance delay-3">
+            PassaGo organizes terminal passenger dispatch fairly. Every driver gets equal trips, verified fares, and steady daily earnings.
+          </p>
+</section>
+<!-- Feature List with Hairline Dividers -->
+<div class="flex flex-col w-full animate-entrance delay-4">
+<div class="w-full h-[1px] bg-border-hairline"></div>
+<!-- Feature 1: Fair rotation queue -->
+<div class="flex items-start gap-4 py-4">
+<div class="w-10 h-10 rounded-xl bg-surface-subtle border border-border-hairline flex items-center justify-center shrink-0 text-accent-magenta">
+<span class="material-symbols-outlined text-[20px]" style='font-variation-settings: "FILL" 1;'>sync_alt</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0 pt-0.5">
+<span class="text-[15px] font-medium text-text-main">Fair rotation queue</span>
+<span class="text-[13px] text-text-muted leading-tight mt-0.5">Automatic turn priority based on passengers served.</span>
+</div>
+</div>
+<div class="w-full h-[1px] bg-border-hairline"></div>
+<!-- Feature 2: Scheduled shifts -->
+<div class="flex items-start gap-4 py-4">
+<div class="w-10 h-10 rounded-xl bg-surface-subtle border border-border-hairline flex items-center justify-center shrink-0 text-accent-magenta">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0 pt-0.5">
+<span class="text-[15px] font-medium text-text-main">Scheduled shifts</span>
+<span class="text-[13px] text-text-muted leading-tight mt-0.5">Choose morning (AM) or afternoon (PM) dispatch hours.</span>
+</div>
+</div>
+<div class="w-full h-[1px] bg-border-hairline"></div>
+<!-- Feature 3: Trip records -->
+<div class="flex items-start gap-4 py-4">
+<div class="w-10 h-10 rounded-xl bg-surface-subtle border border-border-hairline flex items-center justify-center shrink-0 text-accent-magenta">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+</div>
+<div class="flex flex-col flex-1 min-w-0 pt-0.5">
+<span class="text-[15px] font-medium text-text-main">Trip records</span>
+<span class="text-[13px] text-text-muted leading-tight mt-0.5">Clear daily trip history and recorded fare totals.</span>
+</div>
+</div>
+<div class="w-full h-[1px] bg-border-hairline"></div>
+</div>
+<!-- Terminal Status Pill -->
+<div class="mt-6 p-3.5 bg-surface-subtle border border-border-hairline rounded-xl flex items-center gap-3 animate-entrance delay-5">
+<span class="material-symbols-outlined text-accent-magenta text-[20px] shrink-0" style='font-variation-settings: "FILL" 1;'>info</span>
+<p class="text-[13px] text-text-secondary leading-snug flex-1">
+<strong class="font-medium text-text-main">Poblacion Central Terminal</strong> • Active queue dispatch open.
+          </p>
+</div>
+</div>
+</div>
+<!-- Bottom Actions & Regulatory Note -->
+<div class="w-full px-5 pb-6 pt-2 flex flex-col gap-3">
+<button class="w-full h-12 bg-plum-primary text-white font-medium text-[15px] rounded-xl flex items-center justify-center tracking-normal shadow-sm transition-all duration-150 active:scale-[0.98] active:opacity-95 animate-entrance delay-5" id="btn-get-started" type="button">
+        Get started
+      </button>
+<button class="w-full h-11 text-text-secondary font-normal text-[14px] flex items-center justify-center text-center transition-transform duration-150 active:scale-[0.99] animate-entrance delay-6" id="btn-login" type="button">
+        Already have a Driver ID? <span class="ml-1 font-medium text-accent-magenta underline">Log in</span>
+</button>
+<div class="text-center mt-1 animate-entrance delay-7">
+<span class="text-xs text-text-muted">
+          Accredited by Poblacion TODA Office
+        </span>
+</div>
+</div>
+</main>
+</body></html>
